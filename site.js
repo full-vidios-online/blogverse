@@ -444,7 +444,7 @@
         else {
 
           popupBtnText.textContent =
-            'Watch Advertisement';
+            'Watch Advertisement (3 left)';
 
         }
 
