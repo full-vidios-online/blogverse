@@ -1,269 +1,339 @@
-
 /* =========================================================
-   MAIN
-   ========================================================= */
+   ROOT
+========================================================= */
 
-.video-unlock-system {
+.modern-video-unlock,
+.modern-unlock-popup {
 
-  width:100%;
-  max-width:900px;
-  margin:20px auto;
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --secondary: #06b6d4;
+  --success: #10b981;
+  --danger: #ef4444;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
 
 }
 
 
 /* =========================================================
-   VIDEO
-   ========================================================= */
+   VIDEO CONTAINER
+========================================================= */
 
-.video-area {
+.modern-video-unlock {
 
-  position:relative;
+  width: 100%;
+  max-width: 920px;
+  margin: 20px auto;
 
-  width:100%;
+}
 
-  aspect-ratio:16/9;
 
-  overflow:hidden;
+.modern-video-area {
 
-  background:#000;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
 
-  border-radius:14px;
+  background: #050505;
+
+  overflow: hidden;
+
+  border-radius: 18px;
 
   box-shadow:
-    0 8px 30px rgba(0,0,0,.20);
+    0 15px 45px rgba(0,0,0,.18);
 
 }
 
 
-.video-area iframe {
+.modern-video-area iframe {
 
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 
-  border:0;
+  display: block;
 
-  display:block;
+  border: 0;
 
 }
 
 
 /* =========================================================
-   OVERLAY
-   ========================================================= */
+   VIDEO OVERLAY
+========================================================= */
 
-.video-overlay {
+.modern-video-overlay {
 
-  position:absolute;
+  position: absolute;
 
-  inset:0;
+  inset: 0;
 
-  z-index:20;
+  display: flex;
 
-  display:flex;
+  align-items: center;
 
-  align-items:center;
-  justify-content:center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 20px;
 
   background:
-    rgba(0,0,0,.43);
+    linear-gradient(
+      135deg,
+      rgba(3,7,18,.82),
+      rgba(15,23,42,.72)
+    );
+
+  backdrop-filter: blur(3px);
+
+  z-index: 10;
 
   transition:
-    opacity .45s ease,
-    visibility .45s ease;
+    opacity .3s ease,
+    visibility .3s ease;
+
+}
+
+
+.modern-video-overlay.hidden {
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+}
+
+
+/* =========================================================
+   VIDEO LOCK CONTENT
+========================================================= */
+
+.video-lock-content {
+
+  width: 100%;
+  max-width: 390px;
+
+  animation:
+    videoLockIn .45s ease;
+
+}
+
+
+@keyframes videoLockIn {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(18px)
+      scale(.95);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+  }
+
+}
+
+
+.video-lock-icon {
+
+  width: 72px;
+  height: 72px;
+
+  margin: 0 auto 16px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 22px;
+
+  color: #fff;
+
+  font-size: 28px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--secondary)
+    );
+
+  box-shadow:
+    0 12px 35px rgba(37,99,235,.4);
+
+}
+
+
+.video-lock-title {
+
+  color: #fff;
+
+  font-size: 23px;
+
+  font-weight: 800;
+
+  margin-bottom: 7px;
+
+}
+
+
+.video-lock-subtitle {
+
+  color: rgba(255,255,255,.75);
+
+  font-size: 14px;
+
+  line-height: 1.6;
+
+  margin-bottom: 20px;
 
 }
 
 
 /* =========================================================
    UNLOCK BUTTON
-   ========================================================= */
+========================================================= */
 
-.unlock-btn {
+.modern-unlock-btn {
 
-  position:relative;
+  display: inline-flex;
 
-  display:inline-flex;
+  align-items: center;
+  justify-content: center;
 
-  align-items:center;
-  justify-content:center;
+  gap: 9px;
 
-  gap:9px;
+  padding: 14px 25px;
 
-  min-width:195px;
+  border: 0;
 
-  padding:15px 28px;
+  border-radius: 12px;
 
-  border:0;
+  color: #fff;
 
-  border-radius:50px;
+  font-size: 15px;
 
-  background:#e53935;
+  font-weight: 700;
 
-  color:#fff;
+  cursor: pointer;
 
-  font-size:16px;
-
-  font-weight:800;
-
-  cursor:pointer;
-
-  overflow:hidden;
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--primary-dark)
+    );
 
   box-shadow:
-    0 6px 0 #b71c1c,
-    0 10px 25px
-    rgba(229,57,53,.45);
+    0 10px 28px rgba(37,99,235,.38);
 
-  animation:
-    unlockJump 1.1s infinite,
-    unlockGlow 1.1s infinite;
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease;
 
 }
 
 
-.unlock-btn svg {
+.modern-unlock-btn:hover {
 
-  width:21px;
-  height:21px;
+  transform: translateY(-2px);
 
-  fill:none;
-
-  stroke:currentColor;
-
-  stroke-width:1.8;
-
-  stroke-linecap:round;
-  stroke-linejoin:round;
+  box-shadow:
+    0 14px 35px rgba(37,99,235,.48);
 
 }
 
 
-@keyframes unlockJump {
+.modern-unlock-btn:active {
 
-  0%,40%,100% {
-
-    transform:
-      translateY(0)
-      scale(1);
-
-  }
-
-  48% {
-
-    transform:
-      translateY(-12px)
-      scale(1.05);
-
-  }
-
-  56% {
-
-    transform:
-      translateY(0)
-      scale(1);
-
-  }
-
-  64% {
-
-    transform:
-      translateY(-7px)
-      scale(1.02);
-
-  }
-
-  72% {
-
-    transform:
-      translateY(0)
-      scale(1);
-
-  }
-
-}
-
-
-@keyframes unlockGlow {
-
-  0%,100% {
-
-    box-shadow:
-      0 6px 0 #b71c1c,
-      0 8px 20px
-      rgba(229,57,53,.35);
-
-  }
-
-  50% {
-
-    box-shadow:
-      0 6px 0 #b71c1c,
-      0 8px 42px
-      rgba(229,57,53,.9);
-
-  }
+  transform: scale(.97);
 
 }
 
 
 /* =========================================================
    POPUP
-   ========================================================= */
+========================================================= */
 
-.unlock-popup {
+.modern-unlock-popup {
 
-  position:absolute;
+  position: fixed;
 
-  inset:0;
+  inset: 0;
 
-  z-index:50;
+  width: 100%;
+  height: 100%;
 
-  display:none;
+  display: none;
 
-  align-items:center;
-  justify-content:center;
+  align-items: center;
+  justify-content: center;
 
-  padding:15px;
+  padding: 15px;
 
-  box-sizing:border-box;
+  box-sizing: border-box;
 
   background:
-    rgba(0,0,0,.70);
+    rgba(2,6,23,.78);
+
+  backdrop-filter:
+    blur(8px);
+
+  z-index: 999999;
 
 }
 
 
-.popup-box {
+.modern-unlock-popup.active {
 
-  position:relative;
+  display: flex;
 
-  width:100%;
+}
 
-  max-width:390px;
 
-  padding:
-    28px 20px 20px;
+/* =========================================================
+   POPUP BOX
+========================================================= */
 
-  box-sizing:border-box;
+.modern-popup-box {
 
-  background:#fff;
+  position: relative;
 
-  border-radius:18px;
+  width: 100%;
+  max-width: 430px;
 
-  text-align:center;
+  max-height: 92vh;
+
+  overflow-y: auto;
+
+  box-sizing: border-box;
+
+  padding: 28px;
+
+  border-radius: 24px;
+
+  background:
+    rgba(255,255,255,.98);
 
   box-shadow:
-    0 18px 55px
-    rgba(0,0,0,.40);
+    0 30px 90px rgba(0,0,0,.35);
 
   animation:
-    popupIn .3s ease;
+    popupIn .3s cubic-bezier(.2,.8,.2,1);
 
 }
 
@@ -272,21 +342,21 @@
 
   from {
 
-    opacity:0;
+    opacity: 0;
 
     transform:
-      scale(.88)
-      translateY(15px);
+      translateY(30px)
+      scale(.94);
 
   }
 
   to {
 
-    opacity:1;
+    opacity: 1;
 
     transform:
-      scale(1)
-      translateY(0);
+      translateY(0)
+      scale(1);
 
   }
 
@@ -295,487 +365,235 @@
 
 /* =========================================================
    CLOSE
-   ========================================================= */
+========================================================= */
 
-.popup-close {
+.modern-popup-close {
 
-  position:absolute;
+  position: absolute;
 
-  top:10px;
-  right:10px;
+  top: 15px;
+  right: 15px;
 
-  width:32px;
-  height:32px;
+  width: 36px;
+  height: 36px;
 
-  border:0;
+  display: flex;
 
-  border-radius:50%;
+  align-items: center;
+  justify-content: center;
 
-  background:#f1f1f1;
+  border: 0;
 
-  display:flex;
+  border-radius: 50%;
 
-  align-items:center;
-  justify-content:center;
+  color: #64748b;
 
-  cursor:pointer;
+  background: #f1f5f9;
 
-}
+  font-size: 16px;
 
+  cursor: pointer;
 
-.popup-close svg {
-
-  width:17px;
-  height:17px;
-
-  fill:none;
-
-  stroke:#333;
-
-  stroke-width:2;
-
-  stroke-linecap:round;
+  transition: .2s ease;
 
 }
 
 
-/* =========================================================
-   POPUP ICON
-   ========================================================= */
+.modern-popup-close:hover {
 
-.popup-icon {
+  color: #111827;
 
-  width:54px;
-  height:54px;
+  background: #e2e8f0;
 
-  margin:
-    0 auto 10px;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  border-radius:50%;
-
-  background:#fff0f0;
-
-}
-
-
-.popup-icon svg {
-
-  width:27px;
-  height:27px;
-
-  fill:none;
-
-  stroke:#e53935;
-
-  stroke-width:1.8;
-
-  stroke-linecap:round;
-  stroke-linejoin:round;
+  transform: rotate(90deg);
 
 }
 
 
 /* =========================================================
-   TITLE
-   ========================================================= */
+   HEADER
+========================================================= */
 
-.popup-box h3 {
+.modern-popup-header {
 
-  margin:
-    0 0 7px;
+  text-align: center;
 
-  font-size:22px;
-
-  color:#151515;
-
-}
-
-
-/* =========================================================
-   DESCRIPTION
-   ========================================================= */
-
-.popup-description {
-
-  margin:
-    0 0 15px;
-
-  color:#666;
-
-  font-size:14px;
-
-  line-height:1.5;
+  padding:
+    3px
+    20px
+    20px;
 
 }
 
 
-/* =========================================================
-   ERROR
-   ========================================================= */
+.modern-popup-icon {
 
-.error-message {
+  width: 62px;
+  height: 62px;
 
-  display:none;
+  margin: 0 auto 14px;
 
-  margin:
-    0 0 12px;
+  display: flex;
 
-  padding:11px 12px;
+  align-items: center;
+  justify-content: center;
 
-  border-radius:10px;
+  border-radius: 19px;
 
-  background:#fff1f1;
+  color: #fff;
 
-  border:1px solid #ffcaca;
-
-  color:#d32f2f;
-
-  text-align:left;
-
-  animation:
-    errorShake .35s ease;
-
-}
-
-
-.error-title {
-
-  display:flex;
-
-  align-items:center;
-
-  gap:7px;
-
-  font-size:14px;
-
-  font-weight:800;
-
-  margin-bottom:4px;
-
-}
-
-
-.error-icon {
-
-  width:20px;
-  height:20px;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  border-radius:50%;
-
-  background:#e53935;
-
-  color:#fff;
-
-  font-weight:bold;
-
-}
-
-
-.error-text {
-
-  font-size:12px;
-
-  line-height:1.5;
-
-  color:#b71c1c;
-
-}
-
-
-@keyframes errorShake {
-
-  0%,
-  100% {
-
-    transform:translateX(0);
-
-  }
-
-  25% {
-
-    transform:translateX(-5px);
-
-  }
-
-  50% {
-
-    transform:translateX(5px);
-
-  }
-
-  75% {
-
-    transform:translateX(-3px);
-
-  }
-
-}
-
-
-/* =========================================================
-   SUCCESS
-   ========================================================= */
-
-.success-message {
-
-  display:none;
-
-  margin:
-    0 0 12px;
-
-  padding:10px;
-
-  border-radius:9px;
-
-  background:#eaf8f0;
-
-  border:1px solid #bce8cd;
-
-  color:#168448;
-
-  font-size:13px;
-
-  font-weight:700;
-
-}
-
-
-/* =========================================================
-   ADS BUTTON
-   ========================================================= */
-
-.step-button {
-
-  position:relative;
-
-  display:flex;
-
-  align-items:center;
-
-  width:100%;
-
-  min-height:50px;
-
-  margin:9px 0;
-
-  padding:0 14px;
-
-  box-sizing:border-box;
-
-  border-radius:10px;
-
-  background:#e53935;
-
-  color:#fff;
-
-  text-decoration:none;
-
-  font-size:15px;
-
-  font-weight:700;
-
-  cursor:pointer;
-
-  transition:
-    transform .2s ease,
-    background .2s ease,
-    opacity .2s ease;
-
-}
-
-
-.step-button:hover {
-
-  transform:
-    translateY(-2px);
-
-}
-
-
-/* =========================================================
-   ICON
-   ========================================================= */
-
-.step-icon {
-
-  width:30px;
-  height:30px;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  margin-right:9px;
-
-  border-radius:7px;
+  font-size: 25px;
 
   background:
-    rgba(255,255,255,.15);
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--secondary)
+    );
+
+  box-shadow:
+    0 10px 28px rgba(37,99,235,.25);
 
 }
 
 
-.step-icon svg {
+.modern-popup-title {
 
-  width:17px;
-  height:17px;
+  color: var(--text);
 
-  fill:none;
+  font-size: 23px;
 
-  stroke:currentColor;
+  font-weight: 800;
 
-  stroke-width:1.8;
-
-  stroke-linecap:round;
-  stroke-linejoin:round;
+  margin-bottom: 7px;
 
 }
 
 
-/* =========================================================
-   TEXT
-   ========================================================= */
+.modern-popup-description {
 
-.step-text {
+  color: var(--muted);
 
-  flex:1;
+  font-size: 13px;
 
-  text-align:left;
+  line-height: 1.65;
 
 }
 
 
-/* =========================================================
-   STATUS
-   ========================================================= */
+.modern-popup-description strong {
 
-.step-status {
-
-  width:22px;
-  height:22px;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
+  color: var(--primary);
 
 }
 
 
 /* =========================================================
-   DISABLED
-   ========================================================= */
+   PROGRESS CARD
+========================================================= */
 
-.step-button.disabled {
+.modern-progress-card {
 
-  background:#eeeeee;
+  padding: 16px;
 
-  color:#999;
+  margin-bottom: 13px;
 
-  pointer-events:none;
+  border: 1px solid #e5e7eb;
 
-  opacity:.75;
-
-}
-
-
-/* =========================================================
-   COMPLETED
-   ========================================================= */
-
-.step-button.completed {
-
-  background:#18a558;
-
-  color:#fff;
-
-  pointer-events:none;
-
-}
-
-
-.step-button.completed
-.step-status::after {
-
-  content:"✓";
-
-  width:22px;
-  height:22px;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  border-radius:50%;
+  border-radius: 16px;
 
   background:
-    rgba(255,255,255,.18);
-
-  font-size:14px;
-
-  font-weight:bold;
+    #f8fafc;
 
 }
 
 
-/* =========================================================
-   PROGRESS
-   ========================================================= */
+.modern-progress-top {
 
-.progress-area {
+  display: flex;
 
-  margin-top:17px;
+  align-items: center;
 
-}
+  justify-content: space-between;
 
-
-.progress-text {
-
-  margin-bottom:7px;
-
-  font-size:12px;
-
-  color:#777;
+  margin-bottom: 11px;
 
 }
 
 
-.progress-bar {
+.modern-progress-label {
 
-  width:100%;
+  display: flex;
 
-  height:5px;
+  align-items: center;
 
-  overflow:hidden;
+  gap: 7px;
 
-  border-radius:10px;
+  color: #475569;
 
-  background:#eee;
+  font-size: 13px;
+
+  font-weight: 700;
 
 }
 
 
-.progress-fill {
+.modern-progress-label i {
 
-  width:0%;
+  color: var(--primary);
 
-  height:100%;
+}
 
-  border-radius:10px;
 
-  background:#18a558;
+.modern-progress-count {
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  color: var(--text);
+
+}
+
+
+.modern-progress-count .slash {
+
+  margin: 0 3px;
+
+  color: #94a3b8;
+
+}
+
+
+.modern-progress-bar {
+
+  width: 100%;
+
+  height: 9px;
+
+  overflow: hidden;
+
+  border-radius: 50px;
+
+  background: #e2e8f0;
+
+}
+
+
+.modern-progress-fill {
+
+  width: 0%;
+
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--primary),
+      var(--secondary)
+    );
 
   transition:
     width .45s ease;
@@ -783,41 +601,444 @@
 }
 
 
+.modern-progress-bottom {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  margin-top: 9px;
+
+  color: #64748b;
+
+  font-size: 11px;
+
+}
+
+
+.modern-progress-bottom i {
+
+  color: var(--success);
+
+}
+
+
+/* =========================================================
+   ACTION CARD
+========================================================= */
+
+.modern-action-card {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 13px;
+
+  margin-bottom: 12px;
+
+  border-radius: 14px;
+
+  background: #eff6ff;
+
+}
+
+
+.modern-action-icon {
+
+  flex: 0 0 auto;
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  color: var(--primary);
+
+  background: #dbeafe;
+
+  font-size: 17px;
+
+}
+
+
+.modern-action-title {
+
+  color: #1e3a8a;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  margin-bottom: 3px;
+
+}
+
+
+.modern-action-text {
+
+  color: #64748b;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+
+}
+
+
+/* =========================================================
+   AD BUTTON
+========================================================= */
+
+.modern-ad-button {
+
+  width: 100%;
+
+  min-height: 53px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  border: 0;
+
+  border-radius: 13px;
+
+  color: #fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--primary-dark)
+    );
+
+  font-size: 15px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 24px rgba(37,99,235,.25);
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    opacity .2s ease;
+
+}
+
+
+.modern-ad-button:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 30px rgba(37,99,235,.35);
+
+}
+
+
+.modern-ad-button:active {
+
+  transform: scale(.98);
+
+}
+
+
+.modern-ad-button:disabled {
+
+  opacity: .55;
+
+  cursor: not-allowed;
+
+  transform: none;
+
+  box-shadow: none;
+
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.modern-message {
+
+  display: none;
+
+  align-items: flex-start;
+
+  gap: 9px;
+
+  margin-top: 12px;
+
+  padding: 11px 12px;
+
+  border-radius: 11px;
+
+  color: #b91c1c;
+
+  background: #fef2f2;
+
+  border: 1px solid #fecaca;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+
+}
+
+
+.modern-message i {
+
+  margin-top: 2px;
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.modern-popup-footer {
+
+  margin-top: 15px;
+
+  padding-top: 13px;
+
+  border-top:
+    1px solid #eef0f3;
+
+}
+
+
+.modern-popup-footer div {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 8px;
+
+  color: #94a3b8;
+
+  font-size: 10px;
+
+  line-height: 1.5;
+
+}
+
+
+.modern-popup-footer div + div {
+
+  margin-top: 6px;
+
+}
+
+
+.modern-popup-footer i {
+
+  width: 13px;
+
+  margin-top: 2px;
+
+  color: #64748b;
+
+}
+
+
 /* =========================================================
    MOBILE
-   ========================================================= */
+========================================================= */
 
-@media(max-width:600px) {
+@media (max-width: 600px) {
 
-  .video-area {
+  .modern-video-unlock {
 
-    border-radius:9px;
+    margin: 10px auto;
 
   }
 
-  .popup-box {
 
-    max-width:350px;
+  .modern-video-area {
+
+    border-radius: 12px;
+
+  }
+
+
+  .video-lock-icon {
+
+    width: 58px;
+    height: 58px;
+
+    border-radius: 17px;
+
+    font-size: 23px;
+
+    margin-bottom: 12px;
+
+  }
+
+
+  .video-lock-title {
+
+    font-size: 19px;
+
+  }
+
+
+  .video-lock-subtitle {
+
+    font-size: 12px;
+
+    margin-bottom: 15px;
+
+  }
+
+
+  .modern-unlock-btn {
+
+    padding: 12px 20px;
+
+    font-size: 13px;
+
+  }
+
+
+  .modern-unlock-popup {
+
+    padding: 9px;
+
+    align-items: center;
+
+  }
+
+
+  .modern-popup-box {
+
+    width: 100%;
+
+    max-width: 370px;
+
+    max-height: 88vh;
+
+    padding: 22px 15px 16px;
+
+    border-radius: 20px;
+
+  }
+
+
+  .modern-popup-icon {
+
+    width: 54px;
+    height: 54px;
+
+    border-radius: 17px;
+
+    font-size: 22px;
+
+    margin-bottom: 11px;
+
+  }
+
+
+  .modern-popup-title {
+
+    font-size: 20px;
+
+  }
+
+
+  .modern-popup-description {
+
+    font-size: 12px;
+
+  }
+
+
+  .modern-progress-card {
+
+    padding: 13px;
+
+  }
+
+
+  .modern-action-card {
+
+    padding: 11px;
+
+  }
+
+
+  .modern-ad-button {
+
+    min-height: 50px;
+
+    font-size: 14px;
+
+  }
+
+
+  .modern-popup-footer div {
+
+    font-size: 9.5px;
+
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 360px) {
+
+  .modern-popup-box {
+
+    max-height: 86vh;
 
     padding:
-      26px 16px 17px;
+      20px
+      13px
+      14px;
 
   }
 
-  .unlock-btn {
 
-    min-width:170px;
+  .modern-popup-title {
 
-    padding:
-      13px 22px;
-
-    font-size:14px;
+    font-size: 19px;
 
   }
 
-  .popup-box h3 {
 
-    font-size:20px;
+  .modern-popup-description {
+
+    font-size: 11px;
+
+  }
+
+
+  .modern-action-text {
+
+    font-size: 10px;
 
   }
 
