@@ -1,64 +1,61 @@
-<!-- =========================================================
-     FONT AWESOME
-========================================================= -->
 
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-
-
 /* =========================================================
    ROOT
 ========================================================= */
 
-.modern-video-unlock,
-.modern-unlock-popup {
+.video-unlock-box {
 
   --primary: #2563eb;
   --primary-dark: #1d4ed8;
   --secondary: #06b6d4;
-  --success: #10b981;
-  --danger: #ef4444;
   --text: #111827;
-  --muted: #6b7280;
-  --border: #e5e7eb;
+  --muted: #64748b;
+  --border: #e2e8f0;
+
+  width: 100%;
+  max-width: 900px;
+
+  margin: 24px auto;
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 
 }
 
 
 /* =========================================================
-   VIDEO CONTAINER
+   VIDEO AREA
 ========================================================= */
 
-.modern-video-unlock {
-
-  width: 100%;
-  max-width: 920px;
-  margin: 20px auto;
-
-}
-
-
-.modern-video-area {
+.video-area {
 
   position: relative;
+
   width: 100%;
+
   aspect-ratio: 16 / 9;
 
-  background: #050505;
+  background: #020617;
 
   overflow: hidden;
 
   border-radius: 18px;
 
   box-shadow:
-    0 15px 45px rgba(0,0,0,.18);
+    0 20px 50px rgba(15,23,42,.20);
 
 }
 
 
-.modern-video-area iframe {
+.video-area iframe {
 
   width: 100%;
   height: 100%;
@@ -74,7 +71,7 @@
    VIDEO OVERLAY
 ========================================================= */
 
-.modern-video-overlay {
+.video-overlay {
 
   position: absolute;
 
@@ -83,7 +80,6 @@
   display: flex;
 
   align-items: center;
-
   justify-content: center;
 
   text-align: center;
@@ -93,54 +89,55 @@
   background:
     linear-gradient(
       135deg,
-      rgba(3,7,18,.82),
+      rgba(2,6,23,.88),
       rgba(15,23,42,.72)
     );
 
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
 
-  z-index: 10;
+  z-index: 20;
 
   transition:
-    opacity .3s ease,
-    visibility .3s ease;
+    opacity .35s ease,
+    visibility .35s ease;
 
 }
 
 
-.modern-video-overlay.hidden {
+.video-overlay.hidden {
 
   opacity: 0;
+
   visibility: hidden;
+
   pointer-events: none;
 
 }
 
 
 /* =========================================================
-   VIDEO LOCK CONTENT
+   LOCK CONTENT
 ========================================================= */
 
 .video-lock-content {
 
-  width: 100%;
-  max-width: 390px;
+  max-width: 430px;
 
   animation:
-    videoLockIn .45s ease;
+    lockContent .45s ease;
 
 }
 
 
-@keyframes videoLockIn {
+@keyframes lockContent {
 
   from {
 
     opacity: 0;
 
     transform:
-      translateY(18px)
-      scale(.95);
+      translateY(15px)
+      scale(.96);
 
   }
 
@@ -157,10 +154,14 @@
 }
 
 
-.video-lock-icon {
+/* =========================================================
+   LOCK ICON
+========================================================= */
 
-  width: 72px;
-  height: 72px;
+.lock-icon {
+
+  width: 7px;
+  height: 7px;
 
   margin: 0 auto 16px;
 
@@ -169,30 +170,31 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 22px;
+  border-radius: 50%;
 
   color: #fff;
 
-  font-size: 28px;
+  font-size: 27px;
 
   background:
     linear-gradient(
       135deg,
-      var(--primary),
-      var(--secondary)
+      #2563eb,
+      #06b6d4
     );
 
   box-shadow:
-    0 12px 35px rgba(37,99,235,.4);
+    0 15px 40px
+    rgba(37,99,235,.35);
 
 }
 
 
-.video-lock-title {
+.lock-title {
 
   color: #fff;
 
-  font-size: 23px;
+  font-size: 25px;
 
   font-weight: 800;
 
@@ -201,7 +203,7 @@
 }
 
 
-.video-lock-subtitle {
+.lock-subtitle {
 
   color: rgba(255,255,255,.75);
 
@@ -218,7 +220,7 @@
    UNLOCK BUTTON
 ========================================================= */
 
-.modern-unlock-btn {
+.unlock-button {
 
   display: inline-flex;
 
@@ -227,7 +229,10 @@
 
   gap: 9px;
 
-  padding: 14px 25px;
+  min-height: 48px;
+
+  padding:
+    0 25px;
 
   border: 0;
 
@@ -235,21 +240,22 @@
 
   color: #fff;
 
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #06b6d4
+    );
+
   font-size: 15px;
 
   font-weight: 700;
 
   cursor: pointer;
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--primary),
-      var(--primary-dark)
-    );
-
   box-shadow:
-    0 10px 28px rgba(37,99,235,.38);
+    0 10px 30px
+    rgba(37,99,235,.35);
 
   transition:
     transform .2s ease,
@@ -258,19 +264,27 @@
 }
 
 
-.modern-unlock-btn:hover {
+.unlock-button:hover {
 
   transform: translateY(-2px);
 
   box-shadow:
-    0 14px 35px rgba(37,99,235,.48);
+    0 15px 35px
+    rgba(37,99,235,.45);
 
 }
 
 
-.modern-unlock-btn:active {
+.unlock-button:active {
 
   transform: scale(.97);
+
+}
+
+
+.unlock-button:disabled {
+
+  cursor: default;
 
 }
 
@@ -279,7 +293,7 @@
    POPUP
 ========================================================= */
 
-.modern-unlock-popup {
+.unlock-popup {
 
   position: fixed;
 
@@ -293,7 +307,7 @@
   align-items: center;
   justify-content: center;
 
-  padding: 15px;
+  padding: 18px;
 
   box-sizing: border-box;
 
@@ -301,14 +315,17 @@
     rgba(2,6,23,.78);
 
   backdrop-filter:
-    blur(8px);
+    blur(10px);
+
+  -webkit-backdrop-filter:
+    blur(10px);
 
   z-index: 999999;
 
 }
 
 
-.modern-unlock-popup.active {
+.unlock-popup.active {
 
   display: flex;
 
@@ -319,12 +336,13 @@
    POPUP BOX
 ========================================================= */
 
-.modern-popup-box {
+.popup-box {
 
   position: relative;
 
   width: 100%;
-  max-width: 430px;
+
+  max-width: 410px;
 
   max-height: 92vh;
 
@@ -332,23 +350,30 @@
 
   box-sizing: border-box;
 
-  padding: 28px;
+  padding: 32px 25px 22px;
+
+  border: 1px solid
+    rgba(255,255,255,.7);
 
   border-radius: 24px;
 
+  text-align: center;
+
   background:
-    rgba(255,255,255,.98);
+    rgba(255,255,255,.97);
 
   box-shadow:
-    0 30px 90px rgba(0,0,0,.35);
+    0 30px 100px
+    rgba(0,0,0,.40);
 
   animation:
-    popupIn .3s cubic-bezier(.2,.8,.2,1);
+    popupAnimation .3s
+    cubic-bezier(.2,.8,.2,1);
 
 }
 
 
-@keyframes popupIn {
+@keyframes popupAnimation {
 
   from {
 
@@ -374,46 +399,46 @@
 
 
 /* =========================================================
-   CLOSE
+   CLOSE BUTTON
 ========================================================= */
 
-.modern-popup-close {
+.popup-close {
 
   position: absolute;
 
-  top: 15px;
-  right: 15px;
+  top: 13px;
+  right: 13px;
 
-  width: 36px;
-  height: 36px;
+  width: 35px;
+  height: 35px;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  border: 0;
+  border: 1px solid #e5e7eb;
 
   border-radius: 50%;
 
+  background: #f8fafc;
+
   color: #64748b;
 
-  background: #f1f5f9;
-
-  font-size: 16px;
+  font-size: 15px;
 
   cursor: pointer;
 
-  transition: .2s ease;
+  transition: .2s;
 
 }
 
 
-.modern-popup-close:hover {
+.popup-close:hover {
+
+  background: #f1f5f9;
 
   color: #111827;
-
-  background: #e2e8f0;
 
   transform: rotate(90deg);
 
@@ -421,34 +446,22 @@
 
 
 /* =========================================================
-   HEADER
+   POPUP HEADER
 ========================================================= */
 
-.modern-popup-header {
+.popup-icon {
 
-  text-align: center;
+  width: 64px;
+  height: 64px;
 
-  padding:
-    3px
-    20px
-    20px;
-
-}
-
-
-.modern-popup-icon {
-
-  width: 62px;
-  height: 62px;
-
-  margin: 0 auto 14px;
+  margin: 0 auto 13px;
 
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  border-radius: 19px;
+  border-radius: 18px;
 
   color: #fff;
 
@@ -457,68 +470,68 @@
   background:
     linear-gradient(
       135deg,
-      var(--primary),
-      var(--secondary)
+      #2563eb,
+      #06b6d4
     );
 
   box-shadow:
-    0 10px 28px rgba(37,99,235,.25);
+    0 12px 30px
+    rgba(37,99,235,.25);
 
 }
 
 
-.modern-popup-title {
+.popup-title {
 
-  color: var(--text);
+  color: #0f172a;
 
-  font-size: 23px;
+  font-size: 24px;
 
   font-weight: 800;
+
+  letter-spacing: -.4px;
 
   margin-bottom: 7px;
 
 }
 
 
-.modern-popup-description {
+.popup-text {
 
-  color: var(--muted);
+  max-width: 330px;
 
-  font-size: 13px;
+  margin:
+    0 auto 22px;
+
+  color: #64748b;
+
+  font-size: 13.5px;
 
   line-height: 1.65;
 
 }
 
 
-.modern-popup-description strong {
-
-  color: var(--primary);
-
-}
-
-
 /* =========================================================
-   PROGRESS CARD
+   PROGRESS
 ========================================================= */
 
-.modern-progress-card {
+.unlock-progress {
 
   padding: 16px;
 
-  margin-bottom: 13px;
+  margin-bottom: 15px;
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e2e8f0;
 
   border-radius: 16px;
 
-  background:
-    #f8fafc;
+  background: #f8fafc;
 
 }
 
 
-.modern-progress-top {
+.progress-top {
 
   display: flex;
 
@@ -526,56 +539,50 @@
 
   justify-content: space-between;
 
-  margin-bottom: 11px;
+  margin-bottom: 9px;
 
 }
 
 
-.modern-progress-label {
+.progress-label {
 
-  display: flex;
+  color: #64748b;
 
-  align-items: center;
+  font-size: 12px;
 
-  gap: 7px;
-
-  color: #475569;
-
-  font-size: 13px;
-
-  font-weight: 700;
+  font-weight: 600;
 
 }
 
 
-.modern-progress-label i {
+.progress-label i {
 
-  color: var(--primary);
+  margin-right: 5px;
 
-}
-
-
-.modern-progress-count {
-
-  font-size: 14px;
-
-  font-weight: 800;
-
-  color: var(--text);
+  color: #2563eb;
 
 }
 
 
-.modern-progress-count .slash {
-
-  margin: 0 3px;
+.progress-count {
 
   color: #94a3b8;
 
+  font-size: 12px;
+
 }
 
 
-.modern-progress-bar {
+.progress-count b {
+
+  color: #0f172a;
+
+  font-size: 14px;
+
+}
+
+
+.progress-bar {
 
   width: 100%;
 
@@ -583,14 +590,14 @@
 
   overflow: hidden;
 
-  border-radius: 50px;
+  border-radius: 20px;
 
   background: #e2e8f0;
 
 }
 
 
-.modern-progress-fill {
+.progress-fill {
 
   width: 0%;
 
@@ -601,21 +608,23 @@
   background:
     linear-gradient(
       90deg,
-      var(--primary),
-      var(--secondary)
+      #2563eb,
+      #06b6d4
     );
 
   transition:
-    width .45s ease;
+    width .45s
+    cubic-bezier(.4,0,.2,1);
 
 }
 
 
-.modern-progress-bottom {
+.remaining-text {
 
   display: flex;
 
   align-items: center;
+  justify-content: center;
 
   gap: 5px;
 
@@ -623,84 +632,14 @@
 
   color: #64748b;
 
-  font-size: 11px;
+  font-size: 11.5px;
 
 }
 
 
-.modern-progress-bottom i {
+.remaining-text i {
 
-  color: var(--success);
-
-}
-
-
-/* =========================================================
-   ACTION CARD
-========================================================= */
-
-.modern-action-card {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-
-  padding: 13px;
-
-  margin-bottom: 12px;
-
-  border-radius: 14px;
-
-  background: #eff6ff;
-
-}
-
-
-.modern-action-icon {
-
-  flex: 0 0 auto;
-
-  width: 42px;
-  height: 42px;
-
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 12px;
-
-  color: var(--primary);
-
-  background: #dbeafe;
-
-  font-size: 17px;
-
-}
-
-
-.modern-action-title {
-
-  color: #1e3a8a;
-
-  font-size: 13px;
-
-  font-weight: 800;
-
-  margin-bottom: 3px;
-
-}
-
-
-.modern-action-text {
-
-  color: #64748b;
-
-  font-size: 11px;
-
-  line-height: 1.5;
+  color: #2563eb;
 
 }
 
@@ -709,67 +648,71 @@
    AD BUTTON
 ========================================================= */
 
-.modern-ad-button {
+.popup-ad-button {
 
   width: 100%;
 
-  min-height: 53px;
+  min-height: 54px;
 
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
-  gap: 9px;
+  gap: 10px;
+
+  padding: 0 15px;
 
   border: 0;
 
-  border-radius: 13px;
+  border-radius: 14px;
 
   color: #fff;
 
   background:
     linear-gradient(
       135deg,
-      var(--primary),
-      var(--primary-dark)
+      #2563eb,
+      #1d4ed8
     );
 
-  font-size: 15px;
+  font-size: 14px;
 
-  font-weight: 750;
+  font-weight: 700;
 
   cursor: pointer;
 
   box-shadow:
-    0 8px 24px rgba(37,99,235,.25);
+    0 10px 25px
+    rgba(37,99,235,.25);
 
   transition:
-    transform .2s ease,
-    box-shadow .2s ease,
-    opacity .2s ease;
+    transform .2s,
+    box-shadow .2s;
 
 }
 
 
-.modern-ad-button:hover {
+.popup-ad-button:hover {
 
   transform: translateY(-2px);
 
   box-shadow:
-    0 12px 30px rgba(37,99,235,.35);
+    0 14px 30px
+    rgba(37,99,235,.32);
 
 }
 
 
-.modern-ad-button:active {
+.popup-ad-button:active {
 
   transform: scale(.98);
 
 }
 
 
-.modern-ad-button:disabled {
+.popup-ad-button:disabled {
 
   opacity: .55;
 
@@ -782,17 +725,48 @@
 }
 
 
+.ad-button-icon {
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background:
+    rgba(255,255,255,.18);
+
+  font-size: 11px;
+
+}
+
+
+.ad-arrow {
+
+  margin-left: auto;
+
+  opacity: .75;
+
+  font-size: 12px;
+
+}
+
+
 /* =========================================================
    MESSAGE
 ========================================================= */
 
-.modern-message {
+.popup-error {
 
   display: none;
 
   align-items: flex-start;
 
-  gap: 9px;
+  gap: 8px;
 
   margin-top: 12px;
 
@@ -800,20 +774,22 @@
 
   border-radius: 11px;
 
-  color: #b91c1c;
+  border: 1px solid #fecdd3;
 
-  background: #fef2f2;
+  color: #be123c;
 
-  border: 1px solid #fecaca;
+  background: #fff1f2;
 
   font-size: 12px;
 
   line-height: 1.5;
 
+  text-align: left;
+
 }
 
 
-.modern-message i {
+.popup-error i {
 
   margin-top: 2px;
 
@@ -821,52 +797,71 @@
 
 
 /* =========================================================
-   FOOTER
+   INFO
 ========================================================= */
 
-.modern-popup-footer {
-
-  margin-top: 15px;
-
-  padding-top: 13px;
-
-  border-top:
-    1px solid #eef0f3;
-
-}
-
-
-.modern-popup-footer div {
+.popup-info {
 
   display: flex;
 
   align-items: flex-start;
 
-  gap: 8px;
+  gap: 9px;
+
+  margin-top: 14px;
+
+  padding: 12px;
+
+  border-radius: 12px;
+
+  color: #64748b;
+
+  background: #f8fafc;
+
+  font-size: 11px;
+
+  line-height: 1.55;
+
+  text-align: left;
+
+}
+
+
+.popup-info i {
+
+  margin-top: 2px;
+
+  color: #2563eb;
+
+}
+
+
+/* =========================================================
+   SECURE BADGE
+========================================================= */
+
+.secure-badge {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  margin-top: 14px;
 
   color: #94a3b8;
 
   font-size: 10px;
 
-  line-height: 1.5;
+  font-weight: 600;
 
 }
 
 
-.modern-popup-footer div + div {
+.secure-badge i {
 
-  margin-top: 6px;
-
-}
-
-
-.modern-popup-footer i {
-
-  width: 13px;
-
-  margin-top: 2px;
-
-  color: #64748b;
+  color: #10b981;
 
 }
 
@@ -877,42 +872,48 @@
 
 @media (max-width: 600px) {
 
-  .modern-video-unlock {
+  .video-unlock-box {
 
-    margin: 10px auto;
+    margin:
+      12px auto;
 
   }
 
 
-  .modern-video-area {
+  .video-area {
 
     border-radius: 12px;
 
   }
 
 
-  .video-lock-icon {
+  .video-lock-content {
+
+    max-width: 310px;
+
+  }
+
+
+  .lock-icon {
 
     width: 58px;
     height: 58px;
 
-    border-radius: 17px;
-
-    font-size: 23px;
-
     margin-bottom: 12px;
 
-  }
-
-
-  .video-lock-title {
-
-    font-size: 19px;
+    font-size: 22px;
 
   }
 
 
-  .video-lock-subtitle {
+  .lock-title {
+
+    font-size: 20px;
+
+  }
+
+
+  .lock-subtitle {
 
     font-size: 12px;
 
@@ -921,93 +922,89 @@
   }
 
 
-  .modern-unlock-btn {
+  .unlock-button {
 
-    padding: 12px 20px;
+    min-height: 44px;
+
+    padding:
+      0 20px;
+
+    border-radius: 11px;
 
     font-size: 13px;
 
   }
 
 
-  .modern-unlock-popup {
+  .unlock-popup {
 
-    padding: 9px;
+    padding: 10px;
 
     align-items: center;
 
   }
 
 
-  .modern-popup-box {
+  .popup-box {
 
     width: 100%;
 
     max-width: 370px;
 
-    max-height: 88vh;
+    max-height: 90vh;
 
-    padding: 22px 15px 16px;
+    padding:
+      28px
+      16px
+      18px;
 
     border-radius: 20px;
 
   }
 
 
-  .modern-popup-icon {
+  .popup-icon {
 
-    width: 54px;
-    height: 54px;
+    width: 55px;
+    height: 55px;
 
-    border-radius: 17px;
+    border-radius: 16px;
 
-    font-size: 22px;
-
-    margin-bottom: 11px;
+    font-size: 21px;
 
   }
 
 
-  .modern-popup-title {
+  .popup-title {
 
-    font-size: 20px;
+    font-size: 21px;
 
   }
 
 
-  .modern-popup-description {
+  .popup-text {
 
     font-size: 12px;
 
+    margin-bottom: 17px;
+
   }
 
 
-  .modern-progress-card {
+  .unlock-progress {
 
     padding: 13px;
 
   }
 
 
-  .modern-action-card {
-
-    padding: 11px;
-
-  }
-
-
-  .modern-ad-button {
+  .popup-ad-button {
 
     min-height: 50px;
 
-    font-size: 14px;
+    border-radius: 12px;
 
-  }
-
-
-  .modern-popup-footer div {
-
-    font-size: 9.5px;
+    font-size: 13px;
 
   }
 
@@ -1015,40 +1012,31 @@
 
 
 /* =========================================================
-   SMALL MOBILE
+   VERY SMALL SCREEN
 ========================================================= */
 
-@media (max-width: 360px) {
+@media (max-width: 350px) {
 
-  .modern-popup-box {
-
-    max-height: 86vh;
+  .popup-box {
 
     padding:
-      20px
+      25px
       13px
-      14px;
+      15px;
 
   }
 
 
-  .modern-popup-title {
+  .popup-title {
 
     font-size: 19px;
 
   }
 
 
-  .modern-popup-description {
+  .popup-text {
 
-    font-size: 11px;
-
-  }
-
-
-  .modern-action-text {
-
-    font-size: 10px;
+    font-size: 11.5px;
 
   }
 
