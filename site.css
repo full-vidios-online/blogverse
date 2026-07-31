@@ -86,12 +86,7 @@
 
   padding: 20px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(2,6,23,.88),
-      rgba(15,23,42,.72)
-    );
+  background: rgba(2, 6, 23, 0.35);
 
   backdrop-filter: blur(4px);
 
