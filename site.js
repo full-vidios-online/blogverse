@@ -4,374 +4,605 @@
 
 
   /* ========================================================
-     CONFIGURATION
+     FIND VIDEO BOXES
   ======================================================== */
 
-  const CONFIG = {
-
-    totalAds: 3,
-
-  requiredTimeMs:
-  5 * 1000,
-
-    unlockDurationMs:
-      60 * 60 * 1000,
-
-    adLinks: [
-
-      "https://example.com/link1",
-
-      "https://example.com/link2",
-
-      "https://example.com/link3"
-
-    ]
-
-  };
-
-
-  /* ========================================================
-     DOM
-  ======================================================== */
-
-  const unlockOverlay =
-    document.getElementById('unlockOverlay');
-
-  const unlockBtn =
-    document.getElementById('unlockBtn');
-
-  const popupOverlay =
-    document.getElementById('unlockPopup');
-
-  const popupTotal =
-    document.getElementById('popupTotal');
-
-  const popupCompleted =
-    document.getElementById('popupCompleted');
-
-  const popupRemaining =
-    document.getElementById('popupRemaining');
-
-  const popupAdBtn =
-    document.getElementById('popupAdBtn');
-
-  const popupBtnText =
-    document.getElementById('popupBtnText');
-
-  const popupError =
-    document.getElementById('popupError');
-
-  const popupErrorText =
-    document.getElementById('popupErrorText');
-
-  const popupMessageIcon =
-    document.getElementById('popupMessageIcon');
-
-  const progressFill =
-    document.getElementById('progressFill');
-
-
-  /* ========================================================
-     STATE
-  ======================================================== */
-
-  let state = {
-
-    completedAds:
-      parseInt(
-        localStorage.getItem(
-          'unlock_completed'
-        )
-      ) || 0,
-
-    isUnlocked:
-      localStorage.getItem(
-        'unlock_status'
-      ) === 'true',
-
-    isAdPending:
-      localStorage.getItem(
-        'unlock_pending'
-      ) === 'true',
-
-    adStartTime:
-      parseInt(
-        localStorage.getItem(
-          'unlock_start_time'
-        )
-      ) || null,
-
-    unlockTime:
-      parseInt(
-        localStorage.getItem(
-          'unlock_time'
-        )
-      ) || null
-
-  };
-
-
-  /* ========================================================
-     SAVE
-  ======================================================== */
-
-  function saveState() {
-
-    localStorage.setItem(
-      'unlock_completed',
-      state.completedAds
+  const boxes =
+    document.querySelectorAll(
+      '.video-unlock-box'
     );
 
-    localStorage.setItem(
-      'unlock_status',
-      state.isUnlocked
-    );
 
-    localStorage.setItem(
-      'unlock_pending',
-      state.isAdPending
-    );
-
-    localStorage.setItem(
-      'unlock_start_time',
-      state.adStartTime || ''
-    );
-
-    localStorage.setItem(
-      'unlock_time',
-      state.unlockTime || ''
-    );
-
-  }
+  boxes.forEach(function (box) {
 
 
-  /* ========================================================
-     EXPIRY
-  ======================================================== */
+    /* ======================================================
+       POST ID
+    ====================================================== */
 
-  function checkUnlockExpiry() {
-
-    if (!state.isUnlocked)
-      return;
-
-
-    if (!state.unlockTime) {
-
-      lockVideo();
-
-      return;
-
-    }
-
-
-    const elapsed =
-      Date.now() -
-      state.unlockTime;
-
-
-    if (
-      elapsed >=
-      CONFIG.unlockDurationMs
-    ) {
-
-      lockVideo();
-
-      showMessage(
-        '১ ঘণ্টার ভিডিও অ্যাক্সেস শেষ হয়েছে। আবার আনলক করুন।',
-        'error'
+    const POST_ID =
+      box.getAttribute(
+        'data-post-id'
       );
 
+
+    if (!POST_ID) {
+
+      console.error(
+        'Video Unlock Error: data-post-id missing.'
+      );
+
+      return;
+
     }
 
-  }
+
+    /* ======================================================
+       STORAGE
+    ====================================================== */
+
+    const STORAGE = {
+
+      completed:
+        'video_unlock_' +
+        POST_ID +
+        '_completed',
+
+      status:
+        'video_unlock_' +
+        POST_ID +
+        '_status',
+
+      pending:
+        'video_unlock_' +
+        POST_ID +
+        '_pending',
+
+      startTime:
+        'video_unlock_' +
+        POST_ID +
+        '_start_time',
+
+      unlockTime:
+        'video_unlock_' +
+        POST_ID +
+        '_unlock_time'
+
+    };
 
 
-  /* ========================================================
-     LOCK VIDEO
-  ======================================================== */
+    /* ======================================================
+       CONFIG
+    ====================================================== */
 
-  function lockVideo() {
+    const CONFIG = {
 
-    state.isUnlocked = false;
+      /* Total advertisements */
 
-    state.completedAds = 0;
-
-    state.isAdPending = false;
-
-    state.adStartTime = null;
-
-    state.unlockTime = null;
-
-    saveState();
-
-    updateUI();
-
-  }
+      totalAds: 3,
 
 
-  /* ========================================================
-     UPDATE UI
-  ======================================================== */
+      /*
+        Advertisement waiting time
 
-  function updateUI() {
+        5 seconds
+      */
 
-    const remaining =
-      Math.max(
-        0,
-        CONFIG.totalAds -
+      requiredTimeMs:
+        5 * 1000,
+
+
+      /*
+        Unlock duration
+
+        1 hour
+      */
+
+      unlockDurationMs:
+        60 * 60 * 1000,
+
+
+      /*
+        Advertisement URLs
+
+        নিজের ad links বসান
+      */
+
+      adLinks: [
+
+        'https://example.com/link1',
+
+        'https://example.com/link2',
+
+        'https://example.com/link3'
+
+      ]
+
+    };
+
+
+    /* ======================================================
+       DOM
+    ====================================================== */
+
+    const unlockOverlay =
+      box.querySelector(
+        '.video-overlay'
+      );
+
+
+    const unlockBtn =
+      box.querySelector(
+        '.unlock-button'
+      );
+
+
+    const popupOverlay =
+      box.querySelector(
+        '.unlock-popup'
+      );
+
+
+    const popupTotal =
+      box.querySelector(
+        '.popupTotal'
+      );
+
+
+    const popupCompleted =
+      box.querySelector(
+        '.popupCompleted'
+      );
+
+
+    const popupRemaining =
+      box.querySelector(
+        '.popupRemaining'
+      );
+
+
+    const popupAdBtn =
+      box.querySelector(
+        '.popup-ad-button'
+      );
+
+
+    const popupBtnText =
+      box.querySelector(
+        '.popupBtnText'
+      );
+
+
+    const popupError =
+      box.querySelector(
+        '.popup-error'
+      );
+
+
+    const popupErrorText =
+      box.querySelector(
+        '.popupErrorText'
+      );
+
+
+    const progressFill =
+      box.querySelector(
+        '.progress-fill'
+      );
+
+
+    const popupClose =
+      box.querySelector(
+        '.popup-close'
+      );
+
+
+    /* ======================================================
+       STATE
+    ====================================================== */
+
+    let state = {
+
+      completedAds:
+
+        parseInt(
+          localStorage.getItem(
+            STORAGE.completed
+          ),
+          10
+        ) || 0,
+
+
+      isUnlocked:
+
+        localStorage.getItem(
+          STORAGE.status
+        ) === 'true',
+
+
+      isAdPending:
+
+        localStorage.getItem(
+          STORAGE.pending
+        ) === 'true',
+
+
+      adStartTime:
+
+        parseInt(
+          localStorage.getItem(
+            STORAGE.startTime
+          ),
+          10
+        ) || null,
+
+
+      unlockTime:
+
+        parseInt(
+          localStorage.getItem(
+            STORAGE.unlockTime
+          ),
+          10
+        ) || null
+
+    };
+
+
+    /* ======================================================
+       SAVE
+    ====================================================== */
+
+    function saveState() {
+
+      localStorage.setItem(
+        STORAGE.completed,
         state.completedAds
       );
 
-
-    const progress =
-      Math.min(
-        100,
-        (
-          state.completedAds /
-          CONFIG.totalAds
-        ) * 100
+      localStorage.setItem(
+        STORAGE.status,
+        state.isUnlocked
       );
 
-
-    progressFill.style.width =
-      progress + '%';
-
-
-    popupTotal.textContent =
-      CONFIG.totalAds;
-
-    popupCompleted.textContent =
-      state.completedAds;
-
-    popupRemaining.textContent =
-      remaining;
-
-
-    /* VIDEO */
-
-    if (state.isUnlocked) {
-
-      unlockOverlay.classList.add(
-        'hidden'
+      localStorage.setItem(
+        STORAGE.pending,
+        state.isAdPending
       );
 
-      unlockBtn.disabled = true;
-
-      unlockBtn.innerHTML =
-        '<i class="fa-solid fa-circle-check"></i>' +
-        '<span>ভিডিও আনলক করা হয়েছে</span>';
-
-    }
-
-    else {
-
-      unlockOverlay.classList.remove(
-        'hidden'
+      localStorage.setItem(
+        STORAGE.startTime,
+        state.adStartTime || ''
       );
 
-      unlockBtn.disabled = false;
-
-      unlockBtn.innerHTML =
-        '<i class="fa-solid fa-unlock-keyhole"></i>' +
-        '<span>ভিডিও আনলক করুন</span>';
-
-    }
-
-
-    /* AD BUTTON */
-
-    if (remaining <= 0) {
-
-      popupBtnText.textContent =
-        'সব ধাপ সম্পন্ন হয়েছে';
-
-      popupAdBtn.disabled = true;
-
-      return;
+      localStorage.setItem(
+        STORAGE.unlockTime,
+        state.unlockTime || ''
+      );
 
     }
 
 
-    if (state.isAdPending) {
+    /* ======================================================
+       RESET
+    ====================================================== */
 
-      popupBtnText.textContent =
-        'বিজ্ঞাপন থেকে ফিরে আসুন...';
+    function resetState() {
 
-      popupAdBtn.disabled = true;
+      state.completedAds = 0;
+
+      state.isUnlocked = false;
+
+      state.isAdPending = false;
+
+      state.adStartTime = null;
+
+      state.unlockTime = null;
+
+      saveState();
 
     }
 
-    else {
 
-      popupBtnText.textContent =
-        `বিজ্ঞাপন দেখুন (${remaining} বাকি)`;
+    /* ======================================================
+       EXPIRY
+    ====================================================== */
 
-      popupAdBtn.disabled = false;
+    function checkUnlockExpiry() {
 
-    }
-
-  }
-
-
-  /* ========================================================
-     OPEN POPUP
-  ======================================================== */
-
-  window.openUnlockPopup =
-    function () {
-
-      checkUnlockExpiry();
-
-      if (state.isUnlocked) {
-
-        updateUI();
+      if (!state.isUnlocked) {
 
         return;
 
       }
 
+
+      if (!state.unlockTime) {
+
+        resetState();
+
+        return;
+
+      }
+
+
+      const elapsed =
+        Date.now() -
+        state.unlockTime;
+
+
+      if (
+        elapsed >=
+        CONFIG.unlockDurationMs
+      ) {
+
+        resetState();
+
+        updateUI();
+
+      }
+
+    }
+
+
+    /* ======================================================
+       UPDATE UI
+    ====================================================== */
+
+    function updateUI() {
+
+      const remaining =
+        Math.max(
+          0,
+          CONFIG.totalAds -
+          state.completedAds
+        );
+
+
+      const progress =
+        Math.min(
+          100,
+          (
+            state.completedAds /
+            CONFIG.totalAds
+          ) * 100
+        );
+
+
+      progressFill.style.width =
+        progress + '%';
+
+
+      /* VIDEO */
+
+      if (state.isUnlocked) {
+
+        unlockOverlay.classList.add(
+          'hidden'
+        );
+
+        unlockBtn.disabled = true;
+
+        unlockBtn.querySelector(
+          'i'
+        ).className =
+          'fa-solid fa-circle-check';
+
+        unlockBtn.querySelector(
+          'span'
+        ).textContent =
+          'Video Unlocked';
+
+      }
+
+      else {
+
+        unlockOverlay.classList.remove(
+          'hidden'
+        );
+
+        unlockBtn.disabled = false;
+
+        unlockBtn.querySelector(
+          'i'
+        ).className =
+          'fa-solid fa-unlock';
+
+        unlockBtn.querySelector(
+          'span'
+        ).textContent =
+          'Unlock Video';
+
+      }
+
+
+      /* NUMBERS */
+
+      popupTotal.textContent =
+        CONFIG.totalAds;
+
+
+      popupCompleted.textContent =
+        state.completedAds;
+
+
+      popupRemaining.textContent =
+        remaining;
+
+
+      /* AD BUTTON */
+
+      if (remaining > 0) {
+
+        if (state.isAdPending) {
+
+          popupBtnText.textContent =
+            'Return after waiting...';
+
+        }
+
+        else {
+
+          popupBtnText.textContent =
+            'Watch Advertisement';
+
+        }
+
+
+        popupAdBtn.disabled =
+          state.isAdPending;
+
+      }
+
+      else {
+
+        popupBtnText.textContent =
+          'All Advertisements Completed';
+
+        popupAdBtn.disabled = true;
+
+      }
+
+    }
+
+
+    /* ======================================================
+       MESSAGE
+    ====================================================== */
+
+    function showMessage(
+      message,
+      type
+    ) {
+
+      popupErrorText.textContent =
+        message;
+
+
+      popupError.style.display =
+        'flex';
+
+
+      if (type === 'success') {
+
+        popupError.style.borderColor =
+          '#a7f3d0';
+
+        popupError.style.color =
+          '#047857';
+
+        popupError.style.background =
+          '#ecfdf5';
+
+        popupError.querySelector(
+          'i'
+        ).className =
+          'fa-solid fa-circle-check';
+
+      }
+
+      else {
+
+        popupError.style.borderColor =
+          '#fecdd3';
+
+        popupError.style.color =
+          '#be123c';
+
+        popupError.style.background =
+          '#fff1f2';
+
+        popupError.querySelector(
+          'i'
+        ).className =
+          'fa-solid fa-circle-exclamation';
+
+      }
+
+
+      clearTimeout(
+        box._messageTimer
+      );
+
+
+      box._messageTimer =
+        setTimeout(
+          function () {
+
+            popupError.style.display =
+              'none';
+
+          },
+          5000
+        );
+
+    }
+
+
+    /* ======================================================
+       OPEN POPUP
+    ====================================================== */
+
+    function openPopup() {
+
+      checkUnlockExpiry();
+
+
+      if (state.isUnlocked) {
+
+        return;
+
+      }
+
+
       updateUI();
+
 
       popupOverlay.classList.add(
         'active'
       );
 
+
       document.body.style.overflow =
         'hidden';
 
-    };
+    }
 
 
-  /* ========================================================
-     CLOSE POPUP
-  ======================================================== */
+    /* ======================================================
+       CLOSE POPUP
+    ====================================================== */
 
-  window.closeUnlockPopup =
-    function () {
+    function closePopup() {
 
       popupOverlay.classList.remove(
         'active'
       );
 
+
       document.body.style.overflow =
         '';
 
+
       checkAdCompletion();
 
-    };
+    }
 
 
-  /* ========================================================
-     START AD
-  ======================================================== */
+    /* ======================================================
+       START AD
+    ====================================================== */
 
-  window.startAdView =
-    function () {
+    function startAdView() {
 
       checkUnlockExpiry();
 
-      if (state.isUnlocked)
+
+      if (state.isUnlocked) {
+
         return;
+
+      }
 
 
       if (
@@ -389,7 +620,7 @@
       if (state.isAdPending) {
 
         showMessage(
-          'আপনি ইতিমধ্যে একটি বিজ্ঞাপন ভিজিট করছেন। ফিরে এসে অপেক্ষা করুন।',
+          'An advertisement is already active. Please return after waiting.',
           'error'
         );
 
@@ -407,7 +638,7 @@
       if (!link) {
 
         showMessage(
-          'Advertisement link পাওয়া যায়নি।',
+          'Advertisement link is not configured.',
           'error'
         );
 
@@ -419,17 +650,15 @@
       state.adStartTime =
         Date.now();
 
+
       state.isAdPending =
         true;
+
 
       saveState();
 
       updateUI();
 
-
-      /*
-        নতুন tab
-      */
 
       const adWindow =
         window.open(
@@ -437,10 +666,6 @@
           '_blank'
         );
 
-
-      /*
-        Popup blocker
-      */
 
       if (!adWindow) {
 
@@ -454,127 +679,134 @@
 
         updateUI();
 
+
         showMessage(
-          'ব্রাউজার popup বন্ধ করে দিয়েছে। অনুগ্রহ করে popup অনুমতি দিন।',
+          'Advertisement could not be opened. Please allow popups.',
           'error'
         );
+
+      }
+
+    }
+
+
+    /* ======================================================
+       CHECK AD
+    ====================================================== */
+
+    function checkAdCompletion() {
+
+      if (
+        !state.isAdPending ||
+        state.isUnlocked
+      ) {
 
         return;
 
       }
 
 
-      /*
-        Maximum pending time
-      */
+      if (!state.adStartTime) {
 
-      setTimeout(
-        function () {
+        state.isAdPending =
+          false;
 
-          if (!state.isAdPending)
-            return;
+        saveState();
 
+        updateUI();
 
-          const elapsed =
-            Date.now() -
-            state.adStartTime;
+        return;
+
+      }
 
 
-          if (
-            elapsed >=
-            5 * 60 * 1000
-          ) {
-
-            state.isAdPending =
-              false;
-
-            state.adStartTime =
-              null;
-
-            saveState();
-
-            updateUI();
-
-            showMessage(
-              'অনেকক্ষণ ধরে ফিরে আসেননি। আবার চেষ্টা করুন।',
-              'error'
-            );
-
-          }
-
-        },
-        5 * 60 * 1000
-      );
-
-    };
-
-
-  /* ========================================================
-     CHECK AD
-  ======================================================== */
-
-  function checkAdCompletion() {
-
-    if (
-      !state.isAdPending ||
-      state.isUnlocked
-    )
-      return;
-
-
-    if (!state.adStartTime) {
-
-      state.isAdPending =
-        false;
-
-      saveState();
-
-      updateUI();
-
-      return;
-
-    }
-
-
-    const elapsed =
-      Date.now() -
-      state.adStartTime;
-
-
-    if (
-      elapsed >=
-      CONFIG.requiredTimeMs
-    ) {
-
-      state.completedAds++;
-
-      state.isAdPending =
-        false;
-
-      state.adStartTime =
-        null;
-
-      saveState();
+      const elapsed =
+        Date.now() -
+        state.adStartTime;
 
 
       if (
-        state.completedAds >=
-        CONFIG.totalAds
+        elapsed >=
+        CONFIG.requiredTimeMs
       ) {
 
-        unlockVideo();
+        state.completedAds++;
+
+        state.isAdPending =
+          false;
+
+        state.adStartTime =
+          null;
+
+
+        saveState();
+
+
+        if (
+          state.completedAds >=
+          CONFIG.totalAds
+        ) {
+
+          unlockVideo();
+
+        }
+
+        else {
+
+          const left =
+            CONFIG.totalAds -
+            state.completedAds;
+
+
+          showMessage(
+            'Advertisement completed. ' +
+            left +
+            ' more remaining.',
+            'success'
+          );
+
+
+          updateUI();
+
+        }
 
       }
 
       else {
 
+        const seconds =
+          Math.floor(
+            elapsed / 1000
+          );
+
+
+        const requiredSeconds =
+          Math.ceil(
+            CONFIG.requiredTimeMs /
+            1000
+          );
+
+
         showMessage(
-          `সফল! আরও ${
-            CONFIG.totalAds -
-            state.completedAds
-          }টি ধাপ বাকি।`,
-          'success'
+          'Please wait ' +
+          Math.max(
+            0,
+            requiredSeconds -
+            seconds
+          ) +
+          ' more seconds.',
+          'error'
         );
+
+
+        state.isAdPending =
+          false;
+
+        state.adStartTime =
+          null;
+
+
+        saveState();
 
         updateUI();
 
@@ -582,22 +814,15 @@
 
     }
 
-    else {
 
-      const seconds =
-        Math.floor(
-          elapsed / 1000
-        );
+    /* ======================================================
+       UNLOCK VIDEO
+    ====================================================== */
 
+    function unlockVideo() {
 
-      showMessage(
-        `মাত্র ${seconds} সেকেন্ড হয়েছে। আরও ${
-          (CONFIG.requiredTimeMs -
-          elapsed) / 1000
-        } সেকেন্ড অপেক্ষা করুন।`,
-        'error'
-      );
-
+      state.isUnlocked =
+        true;
 
       state.isAdPending =
         false;
@@ -605,161 +830,138 @@
       state.adStartTime =
         null;
 
+      state.completedAds =
+        CONFIG.totalAds;
+
+      state.unlockTime =
+        Date.now();
+
+
       saveState();
 
       updateUI();
 
-    }
 
-  }
-
-
-  /* ========================================================
-     UNLOCK
-  ======================================================== */
-
-  function unlockVideo() {
-
-    state.isUnlocked =
-      true;
-
-    state.isAdPending =
-      false;
-
-    state.adStartTime =
-      null;
-
-    state.completedAds =
-      CONFIG.totalAds;
-
-    state.unlockTime =
-      Date.now();
-
-    saveState();
-
-    updateUI();
-
-    popupOverlay.classList.remove(
-      'active'
-    );
-
-    document.body.style.overflow =
-      '';
-
-    unlockOverlay.classList.add(
-      'hidden'
-    );
-
-
-    showMessage(
-      'ভিডিও সফলভাবে ১ ঘণ্টার জন্য আনলক হয়েছে।',
-      'success'
-    );
-
-  }
-
-
-  /* ========================================================
-     MESSAGE
-  ======================================================== */
-
-  function showMessage(
-    message,
-    type = 'error'
-  ) {
-
-    popupErrorText.textContent =
-      message;
-
-    popupError.style.display =
-      'flex';
-
-
-    if (type === 'success') {
-
-      popupError.style.color =
-        '#047857';
-
-      popupError.style.background =
-        '#ecfdf5';
-
-      popupError.style.borderColor =
-        '#a7f3d0';
-
-      popupMessageIcon.className =
-        'fa-solid fa-circle-check';
-
-    }
-
-    else {
-
-      popupError.style.color =
-        '#b91c1c';
-
-      popupError.style.background =
-        '#fef2f2';
-
-      popupError.style.borderColor =
-        '#fecaca';
-
-      popupMessageIcon.className =
-        'fa-solid fa-circle-info';
-
-    }
-
-
-    clearTimeout(
-      window.unlockMessageTimer
-    );
-
-
-    window.unlockMessageTimer =
-      setTimeout(
-        function () {
-
-          popupError.style.display =
-            'none';
-
-        },
-        5000
+      popupOverlay.classList.remove(
+        'active'
       );
 
-  }
+
+      document.body.style.overflow =
+        '';
 
 
-  /* ========================================================
-     OUTSIDE CLICK
-  ======================================================== */
+      unlockOverlay.classList.add(
+        'hidden'
+      );
 
-  popupOverlay.addEventListener(
-    'click',
-    function (e) {
 
-      if (
-        e.target ===
-        popupOverlay
-      ) {
-
-        closeUnlockPopup();
-
-      }
+      console.log(
+        'Video unlocked:',
+        POST_ID
+      );
 
     }
-  );
 
 
-  /* ========================================================
-     VISIBILITY
-  ======================================================== */
+    /* ======================================================
+       EVENTS
+    ====================================================== */
 
-  document.addEventListener(
-    'visibilitychange',
-    function () {
+    unlockBtn.addEventListener(
+      'click',
+      openPopup
+    );
 
-      if (
-        document.visibilityState ===
-        'visible'
-      ) {
+
+    popupAdBtn.addEventListener(
+      'click',
+      startAdView
+    );
+
+
+    popupClose.addEventListener(
+      'click',
+      closePopup
+    );
+
+
+    /* ======================================================
+       OUTSIDE CLICK
+    ====================================================== */
+
+    popupOverlay.addEventListener(
+      'click',
+      function (e) {
+
+        if (
+          e.target ===
+          popupOverlay
+        ) {
+
+          closePopup();
+
+        }
+
+      }
+    );
+
+
+    /* ======================================================
+       ESC KEY
+    ====================================================== */
+
+    document.addEventListener(
+      'keydown',
+      function (e) {
+
+        if (
+          e.key === 'Escape' &&
+          popupOverlay.classList.contains(
+            'active'
+          )
+        ) {
+
+          closePopup();
+
+        }
+
+      }
+    );
+
+
+    /* ======================================================
+       VISIBILITY
+    ====================================================== */
+
+    document.addEventListener(
+      'visibilitychange',
+      function () {
+
+        if (
+          document.visibilityState ===
+          'visible'
+        ) {
+
+          checkUnlockExpiry();
+
+          checkAdCompletion();
+
+          updateUI();
+
+        }
+
+      }
+    );
+
+
+    /* ======================================================
+       WINDOW FOCUS
+    ====================================================== */
+
+    window.addEventListener(
+      'focus',
+      function () {
 
         checkUnlockExpiry();
 
@@ -768,48 +970,67 @@
         updateUI();
 
       }
+    );
+
+
+    /* ======================================================
+       EXPIRY CHECK
+    ====================================================== */
+
+    setInterval(
+      function () {
+
+        checkUnlockExpiry();
+
+      },
+      1000
+    );
+
+
+    /* ======================================================
+       RESET THIS VIDEO
+       
+       Console:
+       resetThisVideoUnlock()
+    ====================================================== */
+
+    function resetThisVideoUnlock() {
+
+      localStorage.removeItem(
+        STORAGE.completed
+      );
+
+      localStorage.removeItem(
+        STORAGE.status
+      );
+
+      localStorage.removeItem(
+        STORAGE.pending
+      );
+
+      localStorage.removeItem(
+        STORAGE.startTime
+      );
+
+      localStorage.removeItem(
+        STORAGE.unlockTime
+      );
+
+
+      resetState();
+
+      location.reload();
 
     }
-  );
 
 
-  /* ========================================================
-     WINDOW FOCUS
-  ======================================================== */
-
-  window.addEventListener(
-    'focus',
-    function () {
-
-      checkUnlockExpiry();
-
-      checkAdCompletion();
-
-      updateUI();
-
-    }
-  );
+    window.resetThisVideoUnlock =
+      resetThisVideoUnlock;
 
 
-  /* ========================================================
-     EXPIRY CHECK
-  ======================================================== */
-
-  setInterval(
-    function () {
-
-      checkUnlockExpiry();
-
-    },
-    1000
-  );
-
-
-  /* ========================================================
-     INITIALIZE
-  ======================================================== */
-
-  function initialize() {
+    /* ======================================================
+       INITIALIZE
+    ====================================================== */
 
     if (
       state.completedAds >
@@ -819,6 +1040,8 @@
       state.completedAds =
         CONFIG.totalAds;
 
+      saveState();
+
     }
 
 
@@ -826,59 +1049,12 @@
 
     updateUI();
 
-  }
 
-
-  if (
-    document.readyState ===
-    'loading'
-  ) {
-
-    document.addEventListener(
-      'DOMContentLoaded',
-      initialize
+    console.log(
+      'Modern Video Unlock Loaded:',
+      POST_ID
     );
 
-  }
-
-  else {
-
-    initialize();
-
-  }
-
-
-  /* ========================================================
-     RESET
-     Console:
-     resetUnlockSystem()
-  ======================================================== */
-
-  window.resetUnlockSystem =
-    function () {
-
-      localStorage.removeItem(
-        'unlock_completed'
-      );
-
-      localStorage.removeItem(
-        'unlock_status'
-      );
-
-      localStorage.removeItem(
-        'unlock_pending'
-      );
-
-      localStorage.removeItem(
-        'unlock_start_time'
-      );
-
-      localStorage.removeItem(
-        'unlock_time'
-      );
-
-      location.reload();
-
-    };
+  });
 
 })();
